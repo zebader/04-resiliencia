@@ -1,0 +1,238 @@
+@import url('https://fonts.googleapis.com/css?family=Montserrat|Playfair+Display:700&display=swap');
+*{
+  margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+  vertical-align: baseline;
+  color: white;
+}
+body{
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  font-family: 'Montserrat', sans-serif;
+  background-color: #3399ff;
+}
+h1{
+  font-family: 'Playfair Display', serif;
+  font-size: 2em;
+}
+h1{
+  font-size: 1.5em;
+}
+p{
+  font-size: 1.2em;
+}
+button {
+  border: none;
+  margin: 0;
+  padding: 0;
+  width: auto;
+  overflow: visible;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  line-height: normal;
+  -webkit-font-smoothing: inherit;
+  -moz-osx-font-smoothing: inherit;
+  -webkit-appearance: none;
+  transition: all 300ms;
+  cursor: pointer;
+}
+button:hover{
+  transform:scale(1.1);
+}
+button:focus{
+  outline: none;
+}
+.startscreen, .mainscreen, .finalscreen {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100vh;
+  position: absolute;
+}
+.resiliencia-container{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  height: 100vh;
+  min-width: 1200px;
+  overflow: hidden;
+  z-index: 2;
+  background-image: url('img/bg.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    background-color: #3399ff;
+  transition: all 500ms ease-in-out;
+  
+}
+.resiliencia-container img{
+  transition: all 100ms ease-in-out;
+}
+.resiliencia-container .resiliencia-canvas{
+  width: 500px;
+  height: 500px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.startscreen-container{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background-color: rgba(0,0,0,0.75);
+  background-position: center;
+  background-size: cover;
+  z-index: 3;
+}
+.startscreen-item{
+  width: 80%;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+}
+.startscreen-item .italic{
+  font-style: italic;
+
+}
+.startscreen-item h1{
+  font-size: 5em;
+  margin: 5%;
+}
+.startscreen-item h2{
+  font-size: 1.5em;
+  margin: 2%;
+}
+.startscreen-item p{
+  margin: 2%;
+}
+
+.startscreen-item button{
+  padding: 30px 60px;
+  font-size: 1.5em;
+  background-color: rgba(0,0,0,0.75);
+
+}
+.finalscreen-container{
+  display: none;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background-color: rgba(0,0,0,0.75);
+  background-position: center;
+  background-size: cover;
+  z-index: 1;
+}
+.finalscreen-item{
+  width: 80%;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+}
+.finalscreen-item h1{
+  font-size: 3em;
+  margin: 2%;
+}
+.finalscreen-item img{
+  border-radius: 30px;
+  margin: 2%;
+  width: 20%;
+}
+.animation-scale {
+  animation: scale 3s infinite;
+}
+
+@keyframes scale {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.3);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+@keyframes bounce {
+	0% {
+		transform:translateY(-50%);
+	}
+	15% {
+		transform:translateY(0);
+		padding: 4px auto;
+	}
+	20% {
+		transform:translateY(-80%);
+	}
+	25% {
+		transform:translateY(0%);
+		padding: 4px auto;
+	}
+	30% {
+		transform:translateY(-70%);
+	}
+	35% {
+		transform:translateY(0%);
+		padding: 5px auto;
+	}
+	40% {
+		transform:translateY(-60%);
+	}
+	45% {
+		transform:translateY(0%);
+		padding: 5px auto;
+	}
+	50% {
+		transform:translateY(-50%);
+	}
+	55% {
+		transform:translateY(0%);
+		padding: 6px auto;
+	}
+	60% {
+		transform:translateY(-30%);
+	}
+	65% {
+		transform:translateY(0%);
+		padding: 6px auto;
+	}
+	70% {
+		transform:translateY(-15%);
+	}
+	75% {
+		transform:translateY(0);
+		padding: 8px auto;
+	}
+	80% {
+		transform:translateY(-10%);
+	}
+	85% {
+		transform:translateY(0);
+		padding: 8px auto;
+	}
+	90% {
+		transform:translateY(-5%);
+	}
+	95% {
+		transform:translateY(0);
+		padding: 10px;
+	}
+	100% {
+		transform:translateY(0);
+		padding: 10px;
+	}
+}
