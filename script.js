@@ -135,23 +135,26 @@ const main = () => {
       model.puzzleImagesSrc.forEach((e,i) => {
         const item = new Image(100, 100);
         item.src = e;
-        item.setAttribute('data-position', i+1)
+        item.setAttribute('data-position', i)
         model.puzzleSelectors.push(item);
       })
       this.shuffleArray(model.puzzleSelectors, canva);
     };
     this.shuffleArray = (array, canva) => {
-      const arrayCopy = [...array]
-      while (arrayCopy.length > 0) {
-          const getRandomPosition = Math.floor(Math.random()*25);
-          const isPosition = model.shuffledSelectors.some( e => {
-            return e.getAttribute('data-position') === getRandomPosition
-          })
-          !isPosition && model.shuffledSelectors.push(array[getRandomPosition])
-      }    
+      let getRandomPosition = 0;
+      let isPosition = false;
+      while (model.shuffledSelectors.length < 25) {
+        getRandomPosition = Math.floor(Math.random()*25);
+        model.shuffledSelectors.length === 0 && model.shuffledSelectors.push(array[getRandomPosition]);
 
-      console.log(model.shuffledSelectors)
-      model.shuffledSelectors.forEach( e => canva.append(e));
+        isPosition = model.shuffledSelectors.some( e => {
+          return e.getAttribute('data-position') === array[getRandomPosition].getAttribute('data-position')
+        })
+        !isPosition && model.shuffledSelectors.push(array[getRandomPosition])
+      };
+      model.shuffledSelectors.forEach( e => {
+        e.addEventListener("click", events.comparePosition);
+        canva.append(e)});
     } 
     this.animatedBg = () => {
       selectors.resilienciaContainer.style.backgroundImage = `none`;
@@ -186,8 +189,11 @@ const main = () => {
       selectors.startscreenContainer.style.display = "none";
       view.createCanva()
       view.animatedBg()
-      view.createStartingPuzzleArray()
     };
+    this.comparePosition = (event) => {
+      const dataPos = Array.from(model.shuffledSelectors).indexOf(event.target)
+      const finalPos = Array.from(model.puzzleSelectors).indexOf(event.target)
+    }
   };
 
   !window.mobileAndTabletcheck() && 
