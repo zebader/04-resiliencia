@@ -145,7 +145,7 @@ const main = () => {
       model.puzzleCounter = this.createCounter(counter)
       model.puzzleCanva = this.createCanva();
       puzzleArray.forEach( e => {
-        e.addEventListener("click", events.comparePosition);
+        e.addEventListener("click", events.comparePosition, true);
         model.puzzleCanva.append(e)});
     }
     this.createStartingPuzzleArray = () => {
