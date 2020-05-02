@@ -61,7 +61,7 @@ const main = () => {
       <h2>Completa el reto de la resiliencia y conocerás tu regalo</h2>
       <p class="italic">"We will either find a way, or make one."</p>
       <button class="startscreen_button">Empezar</button>
-      <p>Tip: ¡Si te atascas vuelve a empezar!</p>`;
+      <p>Tip: ¡Algunas dificultades son ... menos dificiles!</p>`;
     this.mobile = `
       <h1>Error!</h1>
       <h2>Sólo funciono en escritorio y en chrome mejor</h2>
@@ -202,10 +202,12 @@ const main = () => {
         model.stepCounter = 0;
         model.puzzleCounter.remove();
         model.puzzleCanva.remove();
-        view.removeRotation()
+        view.removeDifficulty()
         this.injectArrayToCanva(model.shuffledPuzzleArray);
-        model.updatedPuzzleArray = [...model.shuffledPuzzleArray]
-        view.addRotation()
+        model.updatedPuzzleArray = [...model.shuffledPuzzleArray];
+        const actualDOMpuzzleParts = [...document.querySelectorAll('.puzzle-part')];
+        actualDOMpuzzleParts.forEach(e => e.classList.remove('selected'))
+        view.addDifficulty();
       }
     }
     this.checkFinalArrayOrder = (array) => {
@@ -227,19 +229,39 @@ const main = () => {
           return response.json();
         })
         .then((data) => {
+          model.puzzleCounter.remove();
+          model.puzzleCanva.remove();
+          selectors.resilienciaContainer.style.backgroundImage = `url(img/finalbg.png)`;
+          selectors.resilienciaContainer.style.backgroundSize = `auto`;
           selectors.finalscreenCode.innerHTML = data.feed.entry[2].gs$cell["$t"];
           selectors.finalscreenContainer.style.display = "flex";
           selectors.finalscreenContainer.style.zIndex = 4;
           return
         });
     };
-    this.addRotation = () => {
-      setTimeout(() => {
-        selectors.animationContainer.classList.add('rotating')
-      }, 5000);
+    this.addDifficulty = () => {
+      const rotation = () => setTimeout(() => {
+        selectors.animationContainer.classList.add('rotating-canva')
+      }, 1000);
+      const scale = () => setTimeout(() => {
+        selectors.animationContainer.classList.add('scale-canva')
+      }, 1000);
+      const shrink = () => setTimeout(() => {
+        selectors.animationContainer.classList.add('shrink-canva')
+      }, 1000);
+      const turnover = () => setTimeout(() => {
+        selectors.animationContainer.classList.add('turnover-canva')
+      }, 1000);
+      const opacity = () => setTimeout(() => {
+        selectors.animationContainer.classList.add('opacity-canva')
+      }, 1000);
+      const randomDifficulty = Math.floor(Math.random()*5)
+      const arrayDifficulty = [rotation, scale, shrink, turnover, opacity]
+      return arrayDifficulty[randomDifficulty]()
     };
-    this.removeRotation = () => {
-      selectors.animationContainer.classList.remove('rotating')
+    this.removeDifficulty = () => {
+      selectors.animationContainer.className = '';
+      selectors.animationContainer.classList.add('animation-box')
     };
   };
 
@@ -248,7 +270,7 @@ const main = () => {
       selectors.startscreenContainer.style.display = "none";
       view.createStartingPuzzleArray()
       view.animatedBg()
-      view.addRotation()
+      view.addDifficulty()
     };
     this.comparePosition = (event) => {
       const targerPos = Array.from(model.updatedPuzzleArray).indexOf(event.target)
@@ -263,5 +285,7 @@ const main = () => {
 };
 
 loadImages(myImages).then((images) => {
-  window.addEventListener('load',main);
+  setTimeout(() => {
+    main();
+  }, 2000);
 });

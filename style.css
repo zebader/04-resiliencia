@@ -55,6 +55,12 @@ button:focus{
   height: 100vh;
   position: absolute;
 }
+.mainscreen {
+  flex-direction: column;
+}
+.mainscreen h1{
+  font-size: 4em;
+}
 .resiliencia-container{
   display: flex;
   justify-content: center;
@@ -71,7 +77,6 @@ button:focus{
     background-position: center;
     background-color: #3399ff;
   transition: all 500ms ease-in-out;
-  
 }
 .resiliencia-container img{
   transition: all 100ms ease-in-out;
@@ -116,6 +121,7 @@ button:focus{
   background-position: center;
   background-size: cover;
   z-index: 3;
+  animation: opacity 300ms ease-in-out;
 }
 .startscreen-item{
   width: 80%;
@@ -174,8 +180,28 @@ button:focus{
   margin: 2%;
   width: 20%;
 }
-.rotating {
+.rotating-canva {
   animation: rotating 20s infinite ease-in-out;
+}
+.scale-canva {
+  animation: scale-canva 120s infinite ease-in-out;
+}
+.shrink-canva{
+  animation: shrink-canva 20s infinite ease-in-out;
+}
+.turnover-canva{
+  animation: turnover-canva 20s infinite ease-in-out;
+}
+.opacity-canva{
+  animation: opacity-canva 5s infinite ease-in-out;
+}
+@keyframes opacity {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 
 @keyframes scale {
@@ -207,5 +233,80 @@ button:focus{
   }
   100% {
     transform: rotate(360deg);
+  }
+}
+@keyframes scale-canva {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(0);
+  }
+}
+
+@keyframes shrink-canva {
+  0% {
+    transform: skew(0deg);
+  }
+  25% {
+    transform: skew(45deg);
+  }
+  50% {
+    transform: skew(0deg);
+  }
+  75% {
+    transform: skew(-45deg);
+  }
+  100% {
+    transform: skew(0deg);
+  }
+}
+@keyframes turnover-canva {
+  0% {
+    transform: rotate(0deg) scale(1);
+  }
+  5% {
+    transform: rotate(180deg) scale(1);
+  }
+  50% {
+    transform: rotate(180deg) scale(1.3);
+  }
+  55% {
+    transform: rotate(0deg) scale(1.3);
+  }
+  100% {
+    transform: rotate(0deg) scale(1);
+  }
+}
+@keyframes opacity-canva {
+  0% {
+    opacity: 1;
+  }
+  10% {
+    opacity: 1;
+  }
+  15% {
+    opacity: 0;
+  }
+  20% {
+    opacity: 0;
+  }
+  25% {
+    opacity: 1;
+  }
+  75% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 1;
+  }
+  85% {
+    opacity: 0;
+  }
+  95% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
   }
 }
