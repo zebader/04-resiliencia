@@ -78,6 +78,7 @@ const main = () => {
 
     this.main =
     `<main class="main_resiliencia resiliencia-container">
+      <article class="animation-box"></article>
     </main>`;
     this.initMainTemplate = () => {
       document.querySelector('.mainscreen').innerHTML = this.main;
@@ -109,6 +110,7 @@ const main = () => {
   const selectors = new function () {
     this.page = document.querySelector('body');
     this.resilienciaContainer = this.page.querySelector('.main_resiliencia');
+    this.animationContainer = this.resilienciaContainer.querySelector('.animation-box');
     this.startscreenContainer = this.page.querySelector('.main_startscreen');
     this.startscreenButton = this.startscreenContainer.querySelector('.startscreen_button');
     this.finalscreenContainer = this.page.querySelector('.main_finalscreen');
@@ -116,46 +118,64 @@ const main = () => {
   };
 
   const model = new function(){
-    this.puzzleImagesSrc = [...myImages.splice(2)];
-    this.puzzleSelectors = [];
-    this.shuffledSelectors = [];
+    this.puzzleSrc = [...myImages.splice(2)]
+    this.puzzleCanva;
+    this.initialPuzzleArray = [];
+    this.shuffledPuzzleArray = [];
+    this.updatedPuzzleArray = [];
+    this.stepCounter = 0;
+    this.puzzleCounter;
   };
 
   const view = new function() {
-    this.updatedItems = () => {
-      return [...selectors.resilienciaContainer.querySelectorAll('.resiliencia-item')];
-    };
     this.createCanva = () => {
       const item = document.createElement("div");
       item.classList.add('resiliencia-canvas')
-      this.createStartingPuzzleArray(item)
-      selectors.resilienciaContainer.append(item)
+      selectors.animationContainer.append(item)
+      return item
     };
-    this.createStartingPuzzleArray = (canva) => {
-      model.puzzleImagesSrc.forEach((e,i) => {
+    this.createCounter = (counter) => {
+      const puzzleCounter = document.createElement("p");
+      puzzleCounter.classList.add('resiliencia-counter');
+      puzzleCounter.innerHTML = `Te quedan ${counter} para ganar`
+      selectors.resilienciaContainer.insertBefore(puzzleCounter, selectors.animationContainer);
+      return puzzleCounter
+    };
+    this.injectArrayToCanva = (puzzleArray,counter = 25) => {
+      model.puzzleCounter = this.createCounter(counter)
+      model.puzzleCanva = this.createCanva();
+      puzzleArray.forEach( e => {
+        e.addEventListener("click", events.comparePosition);
+        model.puzzleCanva.append(e)});
+    }
+    this.createStartingPuzzleArray = () => {
+      model.puzzleSrc.forEach((e,i) => {
         const item = new Image(100, 100);
         item.src = e;
         item.setAttribute('data-position', i)
-        model.puzzleSelectors.push(item);
+        item.classList.add('puzzle-part')
+        model.initialPuzzleArray.push(item);
       })
-      this.shuffleArray(model.puzzleSelectors, canva);
+      this.shuffleArray(model.initialPuzzleArray);
     };
-    this.shuffleArray = (array, canva) => {
+    this.shuffleArray = (array) => {
       let getRandomPosition = 0;
       let isPosition = false;
-      while (model.shuffledSelectors.length < 25) {
+      while (model.shuffledPuzzleArray.length < 25) {
         getRandomPosition = Math.floor(Math.random()*25);
-        model.shuffledSelectors.length === 0 && model.shuffledSelectors.push(array[getRandomPosition]);
+        model.shuffledPuzzleArray.length === 0 && model.shuffledPuzzleArray.push(array[getRandomPosition]);
 
-        isPosition = model.shuffledSelectors.some( e => {
+        isPosition = model.shuffledPuzzleArray.some( e => {
           return e.getAttribute('data-position') === array[getRandomPosition].getAttribute('data-position')
         })
-        !isPosition && model.shuffledSelectors.push(array[getRandomPosition])
+        !isPosition && model.shuffledPuzzleArray.push(array[getRandomPosition])
       };
-      model.shuffledSelectors.forEach( e => {
-        e.addEventListener("click", events.comparePosition);
-        canva.append(e)});
-    } 
+      this.injectArrayToCanva(model.shuffledPuzzleArray);
+      this.initUpdatedPuzzleArray(model.shuffledPuzzleArray);
+    }
+    this.initUpdatedPuzzleArray = (initArray) => {
+      model.updatedPuzzleArray = [...initArray]
+    }
     this.animatedBg = () => {
       selectors.resilienciaContainer.style.backgroundImage = `none`;
       const rgb = [0,0,0]
@@ -165,14 +185,43 @@ const main = () => {
           selectors.resilienciaContainer.style.backgroundColor = `rgb(${rgb[0]}, ${rgb[1]}, ${rgb[2]})`;
         });
       }, 500);
-      
     }
-  };
-
-  const events = new function() {
-  this.removeResiliencia = (event) => {
-      event.target.remove()
-      if (view.updatedItems() < 1){
+    this.updatePuzzle = (dataPos, targerPos) => {
+      const isCoincidence = model.stepCounter === dataPos;
+      if(isCoincidence) {
+        model.puzzleCounter.remove();
+        model.puzzleCanva.remove();
+        const finalCount = (model.updatedPuzzleArray.length - model.stepCounter) - 1
+        const splicedElem = model.updatedPuzzleArray.splice(targerPos, 1)
+        splicedElem[0].classList.add('selected')
+        model.updatedPuzzleArray.splice(model.stepCounter, 0, splicedElem[0]);
+        this.injectArrayToCanva(model.updatedPuzzleArray, finalCount);
+        model.stepCounter++
+        this.checkFinalArrayOrder(model.updatedPuzzleArray)
+      } else {
+        model.stepCounter = 0;
+        model.puzzleCounter.remove();
+        model.puzzleCanva.remove();
+        view.removeRotation()
+        this.injectArrayToCanva(model.shuffledPuzzleArray);
+        model.updatedPuzzleArray = [...model.shuffledPuzzleArray]
+        view.addRotation()
+      }
+    }
+    this.checkFinalArrayOrder = (array) => {
+      const actualOrder = [];
+      
+      array.forEach(e => {
+        actualOrder.push(parseInt(e.getAttribute('data-position')))
+      })
+      const isOrdered = actualOrder.filter((e,i) => {
+        return e === i;
+      })
+      console.log(isOrdered)
+      isOrdered.length === 25 && this.removeResiliencia();
+      
+    };
+    this.removeResiliencia = () => {
         fetch('https://spreadsheets.google.com/feeds/cells/1u7fTkRTI5MVgR_mbQWLt5tcU5_mx30nOHI9RqgxpmXQ/1/public/full?alt=json')
         .then((response) => {
           return response.json();
@@ -183,16 +232,28 @@ const main = () => {
           selectors.finalscreenContainer.style.zIndex = 4;
           return
         });
-      };
     };
+    this.addRotation = () => {
+      setTimeout(() => {
+        selectors.animationContainer.classList.add('rotating')
+      }, 5000);
+    };
+    this.removeRotation = () => {
+      selectors.animationContainer.classList.remove('rotating')
+    };
+  };
+
+  const events = new function() {
     this.startResiliencia = (event) => {
       selectors.startscreenContainer.style.display = "none";
-      view.createCanva()
+      view.createStartingPuzzleArray()
       view.animatedBg()
+      view.addRotation()
     };
     this.comparePosition = (event) => {
-      const dataPos = Array.from(model.shuffledSelectors).indexOf(event.target)
-      const finalPos = Array.from(model.puzzleSelectors).indexOf(event.target)
+      const targerPos = Array.from(model.updatedPuzzleArray).indexOf(event.target)
+      const dataPos = parseInt(event.target.attributes[3].value)
+      view.updatePuzzle(dataPos, targerPos)
     }
   };
 
