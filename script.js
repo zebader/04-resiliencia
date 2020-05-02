@@ -233,6 +233,7 @@ const main = () => {
           model.puzzleCanva.remove();
           selectors.resilienciaContainer.style.backgroundImage = `url(img/finalbg.png)`;
           selectors.resilienciaContainer.style.backgroundSize = `auto`;
+          selectors.resilienciaContainer.classList.add('scale-bg');
           selectors.finalscreenCode.innerHTML = data.feed.entry[2].gs$cell["$t"];
           selectors.finalscreenContainer.style.display = "flex";
           selectors.finalscreenContainer.style.zIndex = 4;

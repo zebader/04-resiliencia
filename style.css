@@ -195,6 +195,9 @@ button:focus{
 .opacity-canva{
   animation: opacity-canva 5s infinite ease-in-out;
 }
+.scale-bg{
+  animation: scale-bg 300s infinite ease-in-out;
+}
 @keyframes opacity {
   0% {
     opacity: 0;
@@ -203,7 +206,17 @@ button:focus{
     opacity: 1;
   }
 }
-
+@keyframes scale-bg {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
 @keyframes scale {
   0% {
     transform: scale(1.1) rotate(3deg);
