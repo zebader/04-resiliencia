@@ -196,7 +196,8 @@ button:focus{
   animation: opacity-canva 5s infinite ease-in-out;
 }
 .scale-bg{
-  animation: scale-bg 300s infinite ease-in-out;
+  background-size: auto;
+  animation: scale-bg 300ms infinite ease-in-out;
 }
 @keyframes opacity {
   0% {
@@ -208,10 +209,10 @@ button:focus{
 }
 @keyframes scale-bg {
   0% {
-    transform: scale(1);
+    transform: scale(1); 
   }
   50% {
-    transform: scale(1.2);
+    transform: scale(1.1);
   }
   100% {
     transform: scale(1);
